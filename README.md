@@ -1,3 +1,4 @@
+<img width="1420" height="811" alt="myGymClubUI" src="https://github.com/user-attachments/assets/9613b81e-84c1-4740-866d-d914145358f4" />
 # myGymClub
 myGymClub is a web-based fitness and social application designed for UIC students to build community through shared fitness activities and gamification. It allows users to track personal gym progress, set personalized goals (habitual or strength-based), log workouts, and view fitness events from the university’s recreation center. The app’s social features include sending friend requests, commenting on profiles, and gifting experience points (XP) to others. Its gamification system, inspired by Duolingo, rewards consistency through XP for workouts and event attendance, login streaks, and level progression. Overall, these elements aim to solve two common college challenges: maintaining social connections and consistent fitness habits.
 
