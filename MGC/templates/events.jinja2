@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>REC Events</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+        <style>
+            .bi-clipboard {
+                color: rgba(255,255,255,0.35);
+                font-size: 20px;
+                cursor: pointer;
+                transition: color 0.2s, transform 0.2s;
+            }
+
+            .bi-clipboard:hover {
+                color: var(--teal);
+                transform: scale(1.2);
+            }
+            .hidden{
+                display: none;
+            }
+
+            :root {
+                --teal: #1abc9c;
+                --teal-d: #16a085;
+                --navy: #2c3e50;
+                --slate: #ecf0f1;
+                --muted: #7b8d9d;
+                --border: #dce3ea;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html {
+                height: 100%;
+            }
+
+            body {
+                font-family: 'DM Sans', sans-serif;
+                background: var(--slate);
+                display: flex;
+                align-items: flex-start;
+                min-height: 100vh;
+            }
+
+            .sidebar {
+                width: 210px;
+                height: 100vh;
+                position: sticky;
+                top: 0;
+                flex-shrink: 0;
+                background: linear-gradient(180deg, #1e2e3d 0%, var(--navy) 100%);
+                border-right: 3px solid var(--teal);
+                padding: 24px 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .sidebar-brand {
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 28px;
+                color: var(--teal);
+                letter-spacing: 2px;
+                padding: 0 8px 16px;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+                margin-bottom: 8px;
+            }
+
+            .sidebar a {
+                text-decoration: none;
+            }
+
+            .nav-btn {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                width: 100%;
+                padding: 11px 14px;
+                background: transparent;
+                color: rgba(255,255,255,0.7);
+                border: none;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                font-family: 'DM Sans', sans-serif;
+                cursor: pointer;
+                transition: all 0.2s;
+                text-align: left;
+            }
+
+            .nav-btn i {
+                font-size: 16px;
+                width: 20px;
+                text-align: center;
+            }
+            .btn-group {
+                display: flex;
+                gap: 10px;
+            }
+            .nav-btn:hover,
+            .nav-btn.active {
+                background: rgba(26,188,156,0.15);
+                color: var(--teal);
+            }
+
+            .nav-btn.active {
+                border-left: 3px solid var(--teal);
+                padding-left: 11px;
+            }
+
+            .main-content {
+                flex: 1;
+                min-width: 0;
+                padding: 24px 32px 60px;
+            }
+
+            .topbar {
+                background: linear-gradient(90deg, var(--navy) 0%, #3d5a73 100%);
+                padding: 13px 24px;
+                border-radius: 12px;
+                margin-bottom: 22px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 4px 20px rgba(44,62,80,0.25);
+            }
+
+            .topbar-welcome {
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 22px;
+                color: white;
+                letter-spacing: 1.5px;
+            }
+
+            .xp-block {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+            }
+
+            .xp-label {
+                font-size: 11px;
+                color: rgba(255,255,255,0.6);
+                font-weight: 500;
+            }
+
+            .xp-bar-wrap {
+                background: rgba(255,255,255,0.2);
+                border-radius: 20px;
+                width: 220px;
+                height: 10px;
+                overflow: hidden;
+            }
+
+            .xp-bar-fill {
+                background: linear-gradient(90deg, var(--teal), #2ecc71);
+                height: 100%;
+                border-radius: 20px;
+            }
+
+            .topbar-icons {
+                display: flex;
+                gap: 20px;
+                align-items: center;
+            }
+
+            .topbar-icon {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                color: white;
+                text-decoration: none;
+                font-size: 11px;
+                cursor: pointer;
+                transition: opacity 0.2s, transform 0.2s;
+            }
+
+            .topbar-icon i {
+                font-size: 20px;
+                margin-bottom: 2px;
+            }
+
+            .topbar-icon:hover {
+                opacity: 0.75;
+                transform: translateY(-2px);
+                color: var(--teal);
+                text-decoration: none;
+            }
+
+            .page-header {
+                display: flex;
+                align-items: baseline;
+                gap: 12px;
+                margin-bottom: 22px;
+            }
+
+            .page-title {
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 36px;
+                color: var(--navy);
+                letter-spacing: 2px;
+            }
+
+            .page-sub {
+                font-size: 13px;
+                color: var(--muted);
+                font-weight: 500;
+            }
+
+            #event-cards {
+                display: flex;
+                flex-direction: column;
+                gap: 22px;
+            }
+
+            .event-card {
+                background: #fff;
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                overflow: hidden;
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+
+            .event-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 28px rgba(44,62,80,0.13);
+            }
+
+            .event-header {
+                background: linear-gradient(90deg, var(--navy) 0%, #3d5a73 100%);
+                padding: 16px 22px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .event-name {
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 24px;
+                color: white;
+                letter-spacing: 1.5px;
+                margin: 0;
+            }
+
+            .event-organizer {
+                font-size: 12px;
+                color: rgba(255,255,255,0.6);
+                margin: 3px 0 0;
+            }
+
+            .event-badges {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 8px;
+            }
+
+            .badge-upcoming {
+                background: rgba(26,188,156,0.2);
+                color: var(--teal);
+                border: 1px solid var(--teal);
+                font-size: 11px;
+                font-weight: 600;
+                padding: 4px 12px;
+                border-radius: 20px;
+            }
+
+            .badge-star {
+                color: rgba(255,255,255,0.35);
+                font-size: 20px;
+                cursor: pointer;
+                transition: color 0.2s, transform 0.2s;
+            }
+
+            .badge-star:hover {
+                color: #f1c40f;
+                transform: scale(1.2);
+            }
+
+            .event-body {
+                display: flex;
+                min-height: 260px;
+            }
+
+            .event-info {
+                flex: 1;
+                padding: 22px 26px;
+                border-right: 1px solid var(--border);
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                align-content: start;
+            }
+
+            .info-field label {
+                display: block;
+                font-size: 10px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: .08em;
+                color: var(--muted);
+                margin-bottom: 4px;
+            }
+
+            .info-field span {
+                font-size: 14px;
+                color: var(--navy);
+                font-weight: 500;
+            }
+
+            .info-field.full {
+                grid-column: 1 / -1;
+            }
+
+            .icon-prefix {
+                margin-right: 5px;
+                color: var(--teal);
+            }
+
+            .event-comments {
+                width: 340px;
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: column;
+                padding: 18px 18px 16px;
+                gap: 10px;
+            }
+
+            .comments-heading {
+                font-size: 11px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: .08em;
+                color: var(--muted);
+                flex-shrink: 0;
+            }
+
+            .comment-scroll {
+                height: 170px;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                padding-right: 4px;
+            }
+
+            .comment-scroll::-webkit-scrollbar {
+                width: 4px;
+            }
+
+            .comment-scroll::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .comment-scroll::-webkit-scrollbar-thumb {
+                background: #cfd8dc;
+                border-radius: 10px;
+            }
+
+            .comment-card {
+                background: #f8fafb;
+                border: 1px solid #e8edf1;
+                border-radius: 10px;
+                padding: 10px 12px;
+                flex-shrink: 0;
+                position: relative;
+            }
+
+            .comment-card .delete-comment-btn {
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                background: transparent;
+                border: none;
+                color: #b91c1c;
+                cursor: pointer;
+                font-size: 16px;
+                line-height: 1;
+                padding: 2px;
+            }
+
+            .comment-card .delete-comment-btn:hover {
+                color: #991b1b;
+            }
+
+            .comment-username {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--navy);
+                margin-bottom: 3px;
+            }
+
+            .comment-username i {
+                color: var(--teal);
+                margin-right: 4px;
+                font-size: 11px;
+            }
+
+            .comment-text {
+                font-size: 13px;
+                color: #4a5568;
+                line-height: 1.45;
+            }
+
+            .comments-spacer {
+                flex: 1;
+                min-height: 10px;
+            }
+
+            .btn-count-me-in {
+                flex-shrink: 0;
+                background: linear-gradient(90deg, var(--teal), var(--teal-d));
+                color: white;
+                border: none;
+                border-radius: 10px;
+                padding: 13px;
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 19px;
+                letter-spacing: 1.5px;
+                cursor: pointer;
+                transition: opacity 0.2s, transform 0.2s;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .btn-count-me-in:hover {
+                opacity: 0.88;
+                transform: translateY(-1px);
+            }
+
+            .btn-counted {
+                background: #28a745 !important;
+                cursor: default;
+            }
+
+            .no-comments {
+                font-size: 13px;
+                color: #aab4be;
+                text-align: center;
+                padding: 28px 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="sidebar">
+            <div class="sidebar-brand">myGymClub</div>
+            <a href="/home"><button class="nav-btn"><i class="bi bi-house-door"></i> My Goals</button></a>
+            <a href="/add-goals"><button class="nav-btn"><i class="bi bi-plus-circle"></i> Add Goal</button></a>
+            <a href="/schedule-workout"><button class="nav-btn"><i class="bi bi-calendar-check"></i> Schedule</button></a>
+            <a href="/friends"><button class="nav-btn"><i class="bi bi-people"></i> Friends</button></a>
+            <a href="/events"><button class="nav-btn active"><i class="bi bi-lightning-charge"></i> Events</button></a>
+            <a href="/calendar"><button class="nav-btn"><i class="bi bi-calendar3"></i> Calendar</button></a>
+            <img src="/static/uicflameslogo.png" alt="UIC Flames Logo" style="width: 150px; height: auto; margin-top: auto; align-self: flex-start;">
+        </div>
+
+        <div class="main-content">
+            <div class="topbar">
+                <span class="topbar-welcome">Welcome, {{user}}!</span>
+                <div class="xp-block">
+                    <div class="xp-label">Level {{level}}</div>
+                    <div class="xp-bar-wrap">
+                        <div class="xp-bar-fill" style="width: {{xp_percentage}}%;"></div>
+                    </div>
+                </div>
+                <div class="topbar-icons">
+                    <div class="topbar-icon">
+                        <i class="bi bi-fire" style="color:#e67e22;"></i>Streak: {{streak}}
+                    </div>
+                    <a class="topbar-icon" href="/home"><i class="bi bi-house-door"></i>Home</a>
+                    <a class="topbar-icon" href="/settings"><i class="bi bi-gear"></i>Settings</a>
+                    <a class="topbar-icon" href="/profile"><i class="bi bi-person-circle"></i>Profile</a>
+                    <a class="topbar-icon" href="{{login_link}}"><i class="bi bi-box-arrow-right"></i>Logout</a>
+                </div>
+            </div>
+
+            <div class="page-header">
+                <div class="page-title">REC Events</div>
+                <span class="page-sub">Find your next challenge</span>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-secondary me-md-2" id="allEvents" disabled type="button" onclick="viewAllEvents()">View All Events</button>
+                    <button class="btn btn-primary" type="button" id="interestedEvents" onclick="viewInterestedEvents()">View Interested Events</button>
+                </div>
+            </div>
+
+            <div id="event-cards">
+                {% for event in events %}
+                <div class="event-card" id="{{ event[0] }}">
+                    <div class="event-header">
+                        <div>
+                            <p class="event-name">{{ event[1] }}</p>
+                            <p class="event-organizer"><i class="bi bi-person-fill"></i> {{ event[2] }}</p>
+                        </div>
+                        <div class="event-badges">
+                            <span class="badge-upcoming"><i class="bi bi-lightning-charge-fill"></i> Upcoming</span>
+                            <div class="btn-group">
+                                <i class="bi bi-clipboard" onclick="copyEventLink({{event[0] | safe}})"></i>
+                                <i class="bi bi-star badge-star" title="Save event"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="event-body">
+                        <div class="event-info">
+                            <div class="info-field">
+                                <label><i class="bi bi-calendar3 icon-prefix"></i>Date</label>
+                                <span>{{ event[3] }}</span>
+                            </div>
+                            <div class="info-field">
+                                <label><i class="bi bi-clock icon-prefix"></i>Time</label>
+                                <span>{{ event[4] }} – {{ event[5] }}</span>
+                            </div>
+                            <div class="info-field full">
+                                <label><i class="bi bi-geo-alt icon-prefix"></i>Location</label>
+                                <span>{{ event[7] }}</span>
+                            </div>
+                            <div class="info-field full">
+                                <label><i class="bi bi-chat-left-text icon-prefix"></i>Description</label>
+                                <span>{{ event[6] }}</span>
+                            </div>
+                        </div>
+
+                        <div class="event-comments">
+                            <div class="comments-heading">
+                                <i class="bi bi-chat-dots" style="color:var(--teal);"></i> Community Comments
+                            </div>
+
+                            <div class="comment-scroll">
+                                {% set event_comments = comments.get(event[0], []) %}
+                                {% if event_comments %}
+                                    {% for comment in event_comments %}
+                                        <div class="comment-card">
+                                            {% if comment[1] == user %}
+                                                <form action="/events/delete-comment" method="POST" style="display:inline;">
+                                                    <input type="hidden" name="comment_id" value="{{ comment[0] }}" />
+                                                    <button type="submit" class="delete-comment-btn" title="Delete comment">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                            <div class="comment-username"><i class="bi bi-person-circle"></i> {{ comment[1] }}</div>
+                                            <div class="comment-text">{{ comment[3] }}</div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="no-comments">
+                                        <i class="bi bi-chat-square" style="font-size:24px;display:block;margin-bottom:6px;"></i>
+                                        No comments yet. Be the first!
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="comments-spacer"></div>
+
+                            <div>
+                                <form action="/events/add-comment" method="POST" class="comment-form container">
+                                    <div class="row">
+                                        <input type="hidden" name="event_id" value="{{ event[0] }}"/>
+                                        <input type="text" name="comment" class="user-comment col-9" placeholder="Add a comment..."/>
+                                        <button type="submit" class="submit-button btn btn-secondary col">Post</button>
+                                    </div>
+                                </form>
+
+                                <button
+                                    type="button"
+                                    class="btn-count-me-in mt-2 {% if event[0] in added_event_ids %}btn-counted{% endif %}"
+                                    id="btn-count-{{ event[0] }}"
+                                    data-added="{% if event[0] in added_event_ids %}true{% else %}false{% endif %}"
+                                    onclick="countMeIn('{{ event[0] }}', event)"
+                                >
+                                    {% if event[0] in added_event_ids %}
+                                        ✅ Added
+                                    {% else %}
+                                        <i class="bi bi-check2-circle"></i> Count Me In!
+                                    {% endif %}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+        <script>
+            function countMeIn(eventId, ev) {
+                if (ev) ev.preventDefault();
+
+                const btn = document.getElementById(`btn-count-${eventId}`);
+                if (!btn) return false;
+
+                const isAdded = btn.getAttribute('data-added') === 'true';
+                const endpoint = isAdded ? '/leaves' : `/attends`;
+
+                fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ event_id: eventId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data && (data.success === true || data.status === 200)) {
+                        const newAddedState = !isAdded;
+                        btn.setAttribute('data-added', newAddedState);
+
+                        if (newAddedState) {
+                            btn.innerHTML = '✅ Added';
+                            btn.classList.add('btn-counted');
+                        } else {
+                            btn.innerHTML = '<i class="bi bi-check2-circle"></i> Count Me In!';
+                            btn.classList.remove('btn-counted');
+                        }
+                    } else {
+                        alert("Error: " + (data?.message || "Request failed"));
+                    }
+                })
+                .catch(err => alert("Request failed: " + err));
+
+                return false;
+            }
+
+            function viewAllEvents() {
+                console.log("All Events Hit")
+
+                document.getElementById("allEvents").disabled = true;
+                document.getElementById("allEvents").classList.add("btn-secondary");
+                document.getElementById("allEvents").classList.remove("btn-primary");
+
+                // Get all event cards
+                const cards = document.getElementsByClassName("event-card");
+
+                for (let i = 0; i < cards.length; i++){
+                    const card = cards.item(i);
+
+                    const buttonId = `btn-count-${card.id}`;
+                    const button = document.getElementById(buttonId);
+
+                    //Event isn't added, needs to be toggled on
+                    if(!button.innerText.includes("Added")){ 
+                        card.classList.toggle('hidden');
+                        console.log(`AE: ${buttonId}`);
+                    }
+
+                }
+                
+                document.getElementById("interestedEvents").classList.add("btn-primary");
+                document.getElementById("interestedEvents").classList.remove("btn-secondary");
+                document.getElementById("interestedEvents").disabled = false;
+            }
+
+            function viewInterestedEvents(){
+                console.log("Interested Events Hit")
+
+                document.getElementById("interestedEvents").disabled = true;
+                document.getElementById("interestedEvents").classList.add("btn-secondary");
+                document.getElementById("interestedEvents").classList.remove("btn-primary");
+
+                // Get all event cards
+                const cards = document.getElementsByClassName("event-card");
+
+                for (const card of cards){
+                    const buttonId = `btn-count-${card.id}`;
+                    const button = document.getElementById(buttonId);
+
+                    //Event isn't added, needs to be toggled off
+                    if(!button.innerText.includes("Added")){ 
+                        card.classList.toggle('hidden');
+                        console.log(`IE: ${buttonId}`);
+                    }
+
+                }
+                
+                document.getElementById("allEvents").classList.add("btn-primary");
+                document.getElementById("allEvents").classList.remove("btn-secondary");
+                document.getElementById("allEvents").disabled = false;
+            }
+
+            function copyEventLink(id){
+                const baseLink = "http://127.0.0.1:5001/join-event/"
+                const url = baseLink + encrypt(id);
+                navigator.clipboard.writeText(url);
+                alert("Event invite has been copied!")
+            }
+
+            function encrypt(id){
+                return id;
+            }
+        </script>
+    </body>
+</html>

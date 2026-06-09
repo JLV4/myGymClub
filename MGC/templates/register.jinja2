@@ -1,0 +1,202 @@
+{% block content %}
+<style>
+   /* Ensure layout consistency */
+   *,
+   *::before,
+   *::after {
+       box-sizing: border-box;
+   }
+
+
+   body {
+       margin: 0;
+       height: 100vh;
+       font-family: 'Inter', sans-serif;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       background: radial-gradient(circle at top, #111, #050505);
+       color: white;
+       overflow: hidden;
+   }
+
+
+   /* Ambient on-screen glow */
+   body::before {
+       content: "";
+       position: absolute;
+       width: 500px;
+       height: 500px;
+       background: radial-gradient(circle, rgba(0,255,200,0.15), transparent 70%);
+       top: -120px;
+       left: -120px;
+       filter: blur(120px);
+   }
+
+
+   body::after {
+       content: "";
+       position: absolute;
+       width: 500px;
+       height: 500px;
+       background: radial-gradient(circle, rgba(0,150,255,0.15), transparent 70%);
+       bottom: -120px;
+       right: -120px;
+       filter: blur(120px);
+   }
+
+
+   .card {
+       position: relative;
+       z-index: 2;
+       width: 380px;
+       padding: 50px 40px;
+       border-radius: 20px;
+       background: rgba(255,255,255,0.05);
+       backdrop-filter: blur(18px);
+       border: 1px solid rgba(255,255,255,0.08);
+       box-shadow: 0 20px 70px rgba(0,0,0,0.7);
+       text-align: center;
+       animation: fadeIn 0.8s ease;
+   }
+
+
+   @keyframes fadeIn {
+       from {
+           opacity: 0;
+           transform: translateY(15px);
+       }
+       to {
+           opacity: 1;
+           transform: translateY(0);
+       }
+   }
+
+
+   .logo {
+       font-size: 12px;
+       letter-spacing: 3px;
+       color: #00ffc3;
+       margin-bottom: 12px;
+   }
+
+
+   .card h1 {
+       font-size: 28px;
+       margin-bottom: 6px;
+       letter-spacing: 0.5px;
+   }
+
+
+   .card p {
+       color: #888;
+       margin-bottom: 25px;
+       font-size: 13px;
+       letter-spacing: 0.3px;
+   }
+
+
+   /* Form Inputs */
+   .form-input {
+       width: 100%;
+       padding: 14px;
+       margin-bottom: 15px;
+       border-radius: 10px;
+       border: 1px solid rgba(255,255,255,0.1);
+       background: rgba(255,255,255,0.05);
+       color: white;
+       font-size: 14px;
+       outline: none;
+       transition: 0.2s;
+   }
+
+
+   .form-input::placeholder {
+       color: #777;
+   }
+
+
+   .form-input:focus {
+       border: 1px solid rgba(0,255,200,0.6);
+       box-shadow: 0 0 10px rgba(0,255,200,0.3);
+   }
+
+
+   /* Button group */
+   .btn-register {
+       width: 100%;
+       padding: 14px;
+       margin-top: 5px;
+       border-radius: 12px;
+       font-weight: 600;
+       border: none;
+       cursor: pointer;
+       transition: all 0.25s ease;
+       background: linear-gradient(135deg, #00ffc3, #00aaff);
+       color: black;
+   }
+
+
+   .btn-register:hover {
+       transform: translateY(-2px);
+       box-shadow: 0 10px 30px rgba(0,255,200,0.4);
+   }
+
+
+   /* Flash messages */
+   .flash-message {
+       color: #ff6b6b;
+       margin-top: 15px;
+       font-size: 13px;
+   }
+
+
+   /* Bottom login link */
+   .link-text {
+       margin-top: 20px;
+       font-size: 13px;
+       color: #aaa;
+   }
+
+
+   .link-text a {
+       color: #00ffc3;
+       text-decoration: none;
+       font-weight: 600;
+   }
+
+
+   .link-text a:hover {
+       text-decoration: underline;
+   }
+</style>
+
+
+<div class="card">
+   <div class="logo">MYGYMCLUB</div>
+
+
+   <h1>Create Account</h1>
+   <p>Start your fitness journey today.</p>
+
+
+   <form action="{{ url_for('register') }}" method="POST">
+       <input type="text" name="user" placeholder="Username" class="form-input" required>
+       <input type="password" name="pw" placeholder="Password" class="form-input" required>
+       <input type="password" name="pw2" placeholder="Confirm Password" class="form-input" required>
+       <button type="submit" class="btn-register">Register</button>
+   </form>
+
+
+   {% for message in get_flashed_messages() %}
+       <div class="flash-message">{{ message }}</div>
+   {% endfor %}
+
+
+   <div class="link-text">
+       Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+   </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule Workouts — myGymClub</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --teal: #1abc9c;
+            --teal-d: #16a085;
+            --navy: #2c3e50;
+            --navy-m: #34495e;
+            --slate: #ecf0f1;
+            --card-bg: #ffffff;
+            --muted: #7b8d9d;
+            --border: #dce3ea;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: var(--slate);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 210px;
+            background: linear-gradient(180deg, #1e2e3d 0%, var(--navy) 100%);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-shrink: 0;
+            border-right: 3px solid var(--teal);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar-brand {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            color: var(--teal);
+            letter-spacing: 2px;
+            padding: 0 8px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 8px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+        }
+
+        .sidebar .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            text-align: left;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .sidebar .nav-btn i {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar .nav-btn:hover,
+        .sidebar .nav-btn.active {
+            background: rgba(26, 188, 156, 0.15);
+            color: var(--teal);
+        }
+
+        .sidebar .nav-btn.active {
+            border-left: 3px solid var(--teal);
+            padding-left: 11px;
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 24px 28px;
+            background-color: var(--slate);
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            overflow-y: auto;
+        }
+
+        /* Topbar */
+        .topbar {
+            background: linear-gradient(90deg, var(--navy) 0%, #3d5a73 100%);
+            padding: 12px 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 20px rgba(44,62,80,0.25);
+        }
+
+        .topbar-welcome {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            color: white;
+            letter-spacing: 1.5px;
+        }
+
+        .xp-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .xp-label {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            font-weight: 500;
+        }
+
+        .xp-bar-wrap {
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            width: 220px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .xp-bar-fill {
+            background: linear-gradient(90deg, var(--teal), #2ecc71);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+
+        .topbar-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .topbar-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 11px;
+            transition: opacity 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+
+        .topbar-icon i {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+
+        .topbar-icon:hover {
+            opacity: 0.75;
+            transform: translateY(-2px);
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        /* Page header */
+        .page-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            color: var(--navy);
+            letter-spacing: 2px;
+        }
+
+        .page-sub {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        /* Form card */
+        .form-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 6px 18px rgba(44,62,80,0.06);
+            max-width: 900px;
+        }
+
+        .form-section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            color: var(--navy);
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--navy-m);
+            margin-bottom: 6px;
+        }
+
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 8px;
+        }
+
+        .checkbox-group label,
+        .radio-group label {
+            font-weight: 500;
+            color: var(--navy);
+            margin: 0;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            background-color: var(--teal);
+            border: none;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--teal-d);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="sidebar-brand">myGymClub</div>
+        <a href="/home"><button class="nav-btn"><i class="bi bi-house-door"></i> My Goals</button></a>
+        <a href="/add-goals"><button class="nav-btn"><i class="bi bi-plus-circle"></i> Add Goal</button></a>
+        <a href="/schedule-workout"><button class="nav-btn active"><i class="bi bi-calendar-check"></i> Schedule</button></a>
+        <a href="/friends"><button class="nav-btn"><i class="bi bi-people"></i> Friends</button></a>
+        <a href="/events"><button class="nav-btn"><i class="bi bi-lightning-charge"></i> Events</button></a>
+        <a href="/calendar"><button class="nav-btn"><i class="bi bi-calendar3"></i> Calendar</button></a>
+        <img src="/static/uicflameslogo.png" alt="UIC Flames Logo" style="width: 150px; height: auto; margin-top: auto; align-self: flex-start;">
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+
+        <!-- Top Bar -->
+        <div class="topbar">
+            <span class="topbar-welcome">Welcome, {{user}}!</span>
+            <div class="xp-block">
+                <div class="xp-label">Level {{level}}</div>
+                <div class="xp-bar-wrap">
+                    <div class="xp-bar-fill" style="width: {{xp_percentage}}%;"></div>
+                </div>
+            </div>
+            <div class="topbar-icons">
+                <div class="topbar-icon">
+                    <i class="bi bi-fire" style="color:#e67e22;"></i>Streak: {{streak}}
+                </div>
+                <a class="topbar-icon" href="/home"><i class="bi bi-house-door"></i>Home</a>
+                <a class="topbar-icon" href="/settings"><i class="bi bi-gear"></i>Settings</a>
+                <a class="topbar-icon" href="/profile"><i class="bi bi-person-circle"></i>Profile</a>
+                <a class="topbar-icon" href="{{login_link}}"><i class="bi bi-box-arrow-right"></i>Logout</a>
+            </div>
+        </div>
+
+        <!-- Page header -->
+        <div class="page-header">
+            <div class="page-title">Schedule Workout</div>
+            <span class="page-sub">Plan your upcoming sessions</span>
+        </div>
+
+        <!-- Form -->
+        <div class="form-card">
+            <div class="form-section-title">Workout Details</div>
+
+            <form method="POST" action="/schedule-workout">
+                <div class="form-group">
+                    <label for="title">Workout Title</label>
+                    <input type="text" id="title" name="title" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" class="form-control"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="start_date">Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label>Select Days</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="days" value="sun"> Sun</label>
+                        <label><input type="checkbox" name="days" value="mon"> Mon</label>
+                        <label><input type="checkbox" name="days" value="tues"> Tues</label>
+                        <label><input type="checkbox" name="days" value="wed"> Wed</label>
+                        <label><input type="checkbox" name="days" value="thurs"> Thurs</label>
+                        <label><input type="checkbox" name="days" value="fri"> Fri</label>
+                        <label><input type="checkbox" name="days" value="sat"> Sat</label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="start_time">Start Time</label>
+                        <input type="time" id="start_time" name="start_time" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="end_time">End Time</label>
+                        <input type="time" id="end_time" name="end_time" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="repeat">Repeat Every</label>
+                    <div class="d-flex align-items-center" style="gap:10px;">
+                        <input type="number" id="repeat" name="repeat" min="1" class="form-control" style="max-width:120px;">
+                        <span>week(s)</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Ends</label>
+                    <div class="radio-group flex-column align-items-start">
+                        <label><input type="radio" name="ends" value="never"> Never</label>
+                        <label>
+                            <input type="radio" name="ends" value="on">
+                            On:
+                            <input type="date" name="end_date" class="form-control d-inline-block" style="max-width:220px;">
+                        </label>
+                        <label>
+                            <input type="radio" name="ends" value="after">
+                            After:
+                            <input type="number" name="end_after" min="1" class="form-control d-inline-block" style="max-width:120px;">
+                            times
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="goal">Goal</label>
+                    <select id="goal" name="goal" class="form-control">
+                        {% for goal in goals %}
+                            <option value="{{ goal[1] }}">{{ goal[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Workout</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

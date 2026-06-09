@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home — myGymClub</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --teal: #1abc9c;
+            --teal-d: #16a085;
+            --navy: #2c3e50;
+            --navy-m: #34495e;
+            --slate: #ecf0f1;
+            --card-bg: #ffffff;
+            --muted: #7b8d9d;
+            --border: #dce3ea;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: var(--slate);
+        }
+
+        .sidebar {
+            width: 210px;
+            background: linear-gradient(180deg, #1e2e3d 0%, var(--navy) 100%);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-shrink: 0;
+            border-right: 3px solid var(--teal);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar-brand {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            color: var(--teal);
+            letter-spacing: 2px;
+            padding: 0 8px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 8px;
+        }
+
+        .sidebar a { text-decoration: none; }
+
+        .sidebar .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            text-align: left;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .sidebar .nav-btn i { font-size: 16px; width: 20px; text-align: center; }
+
+        .sidebar .nav-btn:hover,
+        .sidebar .nav-btn.active {
+            background: rgba(26, 188, 156, 0.15);
+            color: var(--teal);
+        }
+
+        .sidebar .nav-btn.active {
+            border-left: 3px solid var(--teal);
+            padding-left: 11px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 24px 28px;
+            background-color: var(--slate);
+            flex-direction: column;
+            min-width: 0;
+            min-height: 0;
+            overflow: scroll;
+        }
+
+        .topbar {
+            background: linear-gradient(90deg, var(--navy) 0%, #3d5a73 100%);
+            padding: 12px 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 20px rgba(44,62,80,0.25);
+        }
+
+        .topbar-welcome {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            color: white;
+            letter-spacing: 1.5px;
+        }
+
+        .xp-block { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .xp-label { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 500; }
+
+        .xp-bar-wrap {
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            width: 220px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .xp-bar-fill {
+            background: linear-gradient(90deg, var(--teal), #2ecc71);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+
+        .topbar-icons { display: flex; gap: 20px; align-items: center; }
+
+        .topbar-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 11px;
+            transition: opacity 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+
+        .topbar-icon i { font-size: 20px; margin-bottom: 2px; }
+
+        .topbar-icon:hover {
+            opacity: 0.75;
+            transform: translateY(-2px);
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            color: var(--navy);
+            letter-spacing: 2px;
+        }
+
+        .page-sub { font-size: 13px; color: var(--muted); font-weight: 500; }
+
+        #goal-cards {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        #goal-cards::-webkit-scrollbar { width: 5px; }
+        #goal-cards::-webkit-scrollbar-track { background: transparent; }
+        #goal-cards::-webkit-scrollbar-thumb { background: #b0bec5; border-radius: 10px; }
+
+        .goal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .goal-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(44,62,80,0.12);
+        }
+
+        .goal-header {
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .goal-header-right { display: flex; align-items: center; gap: 2rem; }
+
+        .goal-header.progress-header {
+            background: linear-gradient(90deg, #1a3a5c 0%, #2980b9 100%);
+        }
+
+        .goal-header.habitual-header {
+            background: linear-gradient(90deg, #0d3d2e 0%, var(--teal-d) 100%);
+        }
+
+        .goal-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            color: white;
+            letter-spacing: 1.5px;
+            margin: 0;
+        }
+
+        .goal-type-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: .04em;
+        }
+
+        .badge-progress {
+            background: rgba(41,128,185,0.25);
+            border: 1px solid #5dade2;
+            color: #aed6f1;
+        }
+
+        .badge-habitual {
+            background: rgba(52, 152, 219, 0.25);
+            border: 1px solid #3498db;
+            color: #e7e7e7ff;
+        }
+
+        .goal-body {
+            padding: 16px 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .goal-field label {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--muted);
+            margin-bottom: 3px;
+        }
+
+        .goal-field span { font-size: 14px; color: var(--navy); font-weight: 500; }
+        .goal-field.full { grid-column: 1 / -1; }
+
+        .goal-actions { display: flex; gap: 8px; }
+
+        .goal-actions button {
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .goal-actions button:hover {
+            background: rgba(255,255,255,0.25);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-brand">myGymClub</div>
+        <a href="/home"><button class="nav-btn active"><i class="bi bi-house-door"></i> My Goals</button></a>
+        <a href="/add-goals"><button class="nav-btn"><i class="bi bi-plus-circle"></i> Add Goal</button></a>
+        <a href="/schedule-workout"><button class="nav-btn"><i class="bi bi-calendar-check"></i> Schedule</button></a>
+        <a href="/friends"><button class="nav-btn"><i class="bi bi-people"></i> Friends</button></a>
+        <a href="/events"><button class="nav-btn"><i class="bi bi-lightning-charge"></i> Events</button></a>
+        <a href="/calendar"><button class="nav-btn"><i class="bi bi-calendar3"></i> Calendar</button></a>
+        <img src="/static/uicflameslogo.png" alt="UIC Flames Logo" style="width: 150px; height: auto; margin-top: auto; align-self: flex-start;">
+    </div>
+
+    <div class="main-content">
+
+        <div class="topbar">
+            <span class="topbar-welcome">Welcome, {{user}}!</span>
+            <div class="xp-block">
+                <div class="xp-label">Level {{level}}</div>
+                <div class="xp-bar-wrap">
+                  <div class="xp-bar-fill" style="width: {{xp_percentage}}%;"></div>
+                </div>
+            </div>
+            <div class="topbar-icons">
+                <div class="topbar-icon">
+                  <i class="bi bi-fire" style="color:#e67e22;"></i>Streak: {{streak}}
+                </div>
+                <a class="topbar-icon" href="/home"><i class="bi bi-house-door"></i>Home</a>
+                <a class="topbar-icon" href="/settings"><i class="bi bi-gear"></i>Settings</a>
+                <a class="topbar-icon" href="/profile"><i class="bi bi-person-circle"></i>Profile</a>
+                <a class="topbar-icon" href="{{login_link}}"><i class="bi bi-box-arrow-right"></i>Logout</a>
+            </div>
+        </div>
+
+        <div class="page-header">
+            <div class="page-title">My Goals</div>
+            <span class="page-sub">Keep pushing — you're doing great</span>
+        </div>
+
+        <div id="goal-cards">
+            {% for goal in goals %}
+            <div class="goal-card">
+
+                <div class="goal-header
+                    {% if goal[2] == 'Exercise' %}progress-header{% else %}habitual-header{% endif %}">
+
+                    <p class="goal-name">{{ goal[1] }}</p>
+
+                    <div class="goal-header-right">
+
+                        <span class="goal-type-badge
+                            {% if goal[2] == 'Exercise' %}badge-progress{% else %}badge-habitual{% endif %}">
+                            {% if goal[2] == 'Exercise' %}
+                            <i class="bi bi-graph-up-arrow"></i> Exercise
+                            {% else %}
+                            <i class="bi bi-clock-history"></i> Habit
+                            {% endif %}
+                        </span>
+
+                        <div class="goal-actions">
+                            <button onclick="editGoal('{{ goal[1] }}')"><i class="bi bi-pencil"></i></button>
+                            <button onclick="deleteGoal('{{ goal[1] }}')"><i class="bi bi-trash"></i></button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="goal-body">
+
+                    <div class="goal-field">
+                        {% if goal[3] == 'minutes' %}
+                            <label>How Long?</label>
+                        {% else %}
+                            <label>How Many?</label>
+                        {% endif %}
+                        <span>{{ goal[4] or goal[5] or '-' }}</span>
+                    </div>
+
+                    <div class="goal-field">
+                        <label>Type</label>
+                        <span>{{ goal[3] }}</span>
+                    </div>
+
+                    <div class="goal-field">
+                        <label>Frequency</label>
+                        <span>{{ goal[7] or '-' }}{% if goal[8] %} / {{ goal[8] }}{% endif %}</span>
+                    </div>
+
+                    <div class="goal-field full">
+                        <label>Notes</label>
+                        <span>{{ goal[9] }}</span>
+                    </div>
+
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script>
+        function editGoal(goalName) {
+            window.location.href = "/add-goals?edit=" + encodeURIComponent(goalName);
+        }
+
+        function deleteGoal(goalName) {
+            if (confirm("Delete goal: " + goalName + "?")) {
+                window.location.href = "/delete-goal?goal=" + encodeURIComponent(goalName);
+            }
+        }
+    </script>
+</body>
+</html>

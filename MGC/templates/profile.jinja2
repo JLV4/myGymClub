@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile — myGymClub</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --teal: #1abc9c;
+            --teal-d: #16a085;
+            --navy: #2c3e50;
+            --slate: #ecf0f1;
+            --muted: #7b8d9d;
+            --border: #dce3ea;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--slate);
+            display: flex;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 210px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, #1e2e3d 0%, var(--navy) 100%);
+            border-right: 3px solid var(--teal);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-brand {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            color: var(--teal);
+            letter-spacing: 2px;
+            padding: 0 8px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 8px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 11px 14px;
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .nav-btn i {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: rgba(26,188,156,0.15);
+            color: var(--teal);
+        }
+
+        .nav-btn.active {
+            border-left: 3px solid var(--teal);
+            padding-left: 11px;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 24px 32px 60px;
+        }
+
+        .topbar {
+            background: linear-gradient(90deg, var(--navy) 0%, #3d5a73 100%);
+            padding: 13px 24px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(44,62,80,0.25);
+        }
+
+        .topbar-welcome {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            color: white;
+            letter-spacing: 1.5px;
+        }
+
+        .xp-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .xp-label {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            font-weight: 500;
+        }
+
+        .xp-bar-wrap {
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            width: 220px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .xp-bar-fill {
+            background: linear-gradient(90deg, var(--teal), #2ecc71);
+            height: 100%;
+            border-radius: 20px;
+        }
+
+        .topbar-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .topbar-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 11px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .topbar-icon i {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+
+        .topbar-icon:hover {
+            opacity: 0.75;
+            transform: translateY(-2px);
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            color: var(--navy);
+            letter-spacing: 2px;
+        }
+
+        .page-sub {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .profile-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px;
+            max-width: 850px;
+            box-shadow: 0 8px 28px rgba(44,62,80,0.10);
+        }
+
+        .profile-card .form-group label {
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .profile-card .form-control {
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+        }
+
+        .btn-save {
+            background: linear-gradient(90deg, var(--teal), var(--teal-d));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-weight: 600;
+        }
+
+        .btn-save:hover {
+            opacity: 0.9;
+            color: white;
+        }
+
+        .btn-back {
+            margin-left: 10px;
+            border-radius: 8px;
+            padding: 10px 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-brand">myGymClub</div>
+        <a href="/home"><button class="nav-btn"><i class="bi bi-house-door"></i> My Goals</button></a>
+        <a href="/add-goals"><button class="nav-btn"><i class="bi bi-plus-circle"></i> Add Goal</button></a>
+        <a href="/schedule-workout"><button class="nav-btn"><i class="bi bi-calendar-check"></i> Schedule</button></a>
+        <a href="/friends"><button class="nav-btn"><i class="bi bi-people"></i> Friends</button></a>
+        <a href="/events"><button class="nav-btn"><i class="bi bi-lightning-charge"></i> Events</button></a>
+        <a href="/calendar"><button class="nav-btn"><i class="bi bi-calendar3"></i> Calendar</button></a>
+        <img src="/static/uicflameslogo.png" alt="UIC Flames Logo" style="width: 150px; height: auto; margin-top: auto; align-self: flex-start;">
+    </div>
+
+    <div class="main-content">
+
+        <div class="topbar">
+            <span class="topbar-welcome">Welcome, {{ user['username'] if user and user['username'] else 'User' }}!</span>
+            <div class="xp-block">
+                <div class="xp-label">Level {{level}}</div>
+                <div class="xp-bar-wrap">
+                    <div class="xp-bar-fill" style="width: {{ xp_percentage }}%;"></div>
+                </div>
+            </div>
+            <div class="topbar-icons">
+                <div class="topbar-icon">
+                    <i class="bi bi-fire" style="color:#e67e22;"></i>Streak: {{ streak }}
+                </div>
+                <a class="topbar-icon" href="/home"><i class="bi bi-house-door"></i>Home</a>
+                <a class="topbar-icon" href="/settings"><i class="bi bi-gear"></i>Settings</a>
+                <a class="topbar-icon" href="/profile"><i class="bi bi-person-circle"></i>Profile</a>
+                <a class="topbar-icon" href="{{ login_link }}"><i class="bi bi-box-arrow-right"></i>Logout</a>
+            </div>
+        </div>
+
+        <div class="page-header">
+            <div class="page-title">Profile</div>
+            <span class="page-sub">Manage your personal information</span>
+        </div>
+
+        <div class="profile-card">
+            <form method="POST" action="/profile">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="first_name">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user['first_name'] }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user['last_name'] }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ user['email'] }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select class="form-control" id="gender" name="gender">
+                        <option value="male" {% if user['gender'] == 'male' %}selected{% endif %}>Male</option>
+                        <option value="female" {% if user['gender'] == 'female' %}selected{% endif %}>Female</option>
+                        <option value="other" {% if user['gender'] == 'other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="height">Height (inches)</label>
+                        <input type="number" class="form-control" id="height" name="height" value="{{ user['height'] }}">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="weight">Weight (lbs)</label>
+                        <input type="number" class="form-control" id="weight" name="weight" value="{{ user['weight'] }}">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="age">Age</label>
+                        <input type="number" class="form-control" id="age" name="age" value="{{ user['age'] }}">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-save">Update Profile</button>
+                <a href="/home" class="btn btn-secondary btn-back">Back to Home</a>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

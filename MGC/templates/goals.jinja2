@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ 'Edit Goal' if goal else 'Add Goal' }} — myGymClub</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --teal: #1abc9c;
+            --teal-d: #16a085;
+            --navy: #2c3e50;
+            --navy-m: #34495e;
+            --slate: #ecf0f1;
+            --card-bg: #ffffff;
+            --muted: #7b8d9d;
+            --border: #dce3ea;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: var(--slate);
+        }
+
+        .sidebar {
+            width: 210px;
+            background: linear-gradient(180deg, #1e2e3d 0%, var(--navy) 100%);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-shrink: 0;
+            border-right: 3px solid var(--teal);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar-brand {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            color: var(--teal);
+            letter-spacing: 2px;
+            padding: 0 8px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 8px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+        }
+
+        .sidebar .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            text-align: left;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .sidebar .nav-btn i {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar .nav-btn:hover,
+        .sidebar .nav-btn.active {
+            background: rgba(26, 188, 156, 0.15);
+            color: var(--teal);
+        }
+
+        .sidebar .nav-btn.active {
+            border-left: 3px solid var(--teal);
+            padding-left: 11px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 24px 28px;
+            background-color: var(--slate);
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            overflow-y: auto;
+        }
+
+        .topbar {
+            background: linear-gradient(90deg, var(--navy) 0%, #3d5a73 100%);
+            padding: 12px 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 20px rgba(44,62,80,0.25);
+        }
+
+        .topbar-welcome {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            color: white;
+            letter-spacing: 1.5px;
+        }
+
+        .xp-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .xp-label {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            font-weight: 500;
+        }
+
+        .xp-bar-wrap {
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            width: 220px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .xp-bar-fill {
+            background: linear-gradient(90deg, var(--teal), #2ecc71);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+
+        .topbar-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .topbar-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 11px;
+            transition: opacity 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+
+        .topbar-icon i {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+
+        .topbar-icon:hover {
+            opacity: 0.75;
+            transform: translateY(-2px);
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            color: var(--navy);
+            letter-spacing: 2px;
+        }
+
+        .page-sub {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .goal-container {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .goal-form-card,
+        .example-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 6px 18px rgba(44,62,80,0.06);
+        }
+
+        .goal-form-card {
+            flex: 2;
+            min-width: 340px;
+        }
+
+        .example-box {
+            flex: 1;
+            min-width: 280px;
+            background-color: #f8fbfc;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            color: var(--navy);
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--navy-m);
+            margin-bottom: 6px;
+        }
+
+        .form-control,
+        select,
+        input[type="text"],
+        input[type="number"] {
+            border-radius: 8px !important;
+            border: 1px solid var(--border) !important;
+        }
+
+        .submit-btn {
+            background-color: var(--teal);
+            border: none;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--teal-d);
+        }
+
+        .flash-message {
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        .example-workout {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #d8e2e8;
+            color: var(--navy);
+        }
+
+        .example-workout:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .example-workout strong {
+            color: var(--navy);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-brand">myGymClub</div>
+        <a href="/home"><button class="nav-btn"><i class="bi bi-house-door"></i> My Goals</button></a>
+        <a href="/add-goals"><button class="nav-btn active"><i class="bi bi-plus-circle"></i> Add Goal</button></a>
+        <a href="/schedule-workout"><button class="nav-btn"><i class="bi bi-calendar-check"></i> Schedule</button></a>
+        <a href="/friends"><button class="nav-btn"><i class="bi bi-people"></i> Friends</button></a>
+        <a href="/events"><button class="nav-btn"><i class="bi bi-lightning-charge"></i> Events</button></a>
+        <a href="/calendar"><button class="nav-btn"><i class="bi bi-calendar3"></i> Calendar</button></a>
+        <img src="/static/uicflameslogo.png" alt="UIC Flames Logo" style="width: 150px; height: auto; margin-top: auto; align-self: flex-start;">
+    </div>
+
+    <div class="main-content">
+
+        <div class="topbar">
+            <span class="topbar-welcome">Welcome, {{user}}!</span>
+            <div class="xp-block">
+                <div class="xp-label">Level {{level}}</div>
+                <div class="xp-bar-wrap">
+                    <div class="xp-bar-fill" style="width: {{xp_percentage}}%;"></div>
+                </div>
+            </div>
+            <div class="topbar-icons">
+                <div class="topbar-icon">
+                    <i class="bi bi-fire" style="color:#e67e22;"></i>Streak: {{streak}}
+                </div>
+                <a class="topbar-icon" href="/home"><i class="bi bi-house-door"></i>Home</a>
+                <a class="topbar-icon" href="/settings"><i class="bi bi-gear"></i>Settings</a>
+                <a class="topbar-icon" href="/profile"><i class="bi bi-person-circle"></i>Profile</a>
+                <a class="topbar-icon" href="{{login_link}}"><i class="bi bi-box-arrow-right"></i>Logout</a>
+            </div>
+        </div>
+
+        <div class="page-header">
+            <div class="page-title">{{ 'Edit Goal' if goal else 'Add Goal' }}</div>
+            <span class="page-sub">Build healthy habits and track progress</span>
+        </div>
+
+        <div class="goal-container">
+
+            <div class="goal-form-card">
+                <div class="section-title">Goal Details</div>
+
+                <form method="post">
+
+                    <div class="form-group">
+                        <label for="name">Exercise Name</label>
+                        <select class="form-control" id="exerciseSelect" name="exerciseSelect">
+                            <option value="">-- Select an exercise --</option>
+                            <option value="Bench Press">Bench Press</option>
+                            <option value="Squats">Squats</option>
+                            <option value="Tricep Curls">Tricep Curls</option>
+                            <option value="Bicep Curls">Bicep Curls</option>
+                            <option value="Leg Raises">Leg Raises</option>
+                            <option value="Pull-ups">Pull-ups</option>
+                            <option value="Planks">Planks</option>
+                            <option value="Lateral Raises">Lateral Raises</option>
+                            <option value="Seated Rows">Seated Rows</option>
+                            <option value="Lat Pulldowns">Lat Pulldowns</option>
+                            <option value="Russian Twists">Russian Twists</option>
+                            <option value="Deadlifts">Deadlifts</option>
+                            <option value="Leg Extensions">Leg Extensions</option>
+                            <option value="Cable Kickbacks">Cable Kickbacks</option>
+                            <option value="RDLS">RDLS</option>
+                            <option value="Bulgarian Split Squats">Bulgarian Split Squats</option>
+                            <option value="Running">Running</option>
+                            <option value="Cycling">Cycling</option>
+                            <option value="Swimming">Swimming</option>
+                            <option value="Pilates">Pilates</option>
+                            <option value="custom">+ Add Custom Workout</option>
+                        </select>
+                        <input type="text" class="form-control" id="customExerciseName" name="name"
+                               placeholder="Enter custom exercise name"
+                               value="{{ goal[1] if goal else '' }}"
+                               style="display: none; margin-top: 8px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="style">Style</label>
+                        <select class="form-control" id="style" name="style">
+                            <option value="Exercise" {% if goal and goal[2] == 'Exercise' %}selected{% endif %}>Exercise</option>
+                            <option value="Habit" {% if goal and goal[2] == 'Habit' %}selected{% endif %}>Habit</option>
+                            <option value="ORM" {% if goal and goal[2] == 'ORM' %}selected{% endif %}>ORM</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reps">Reps</label>
+                        <input type="number" class="form-control" id="reps" name="reps"
+                               value="{{ goal[4] if goal else '' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="repType">Rep Type</label>
+                        <select class="form-control" id="repType" name="repType">
+                            <option value="reps" {% if goal and goal[3] == 'reps' %}selected{% endif %}>reps</option>
+                            <option value="weight" {% if goal and goal[3] == 'weight' %}selected{% endif %}>weight</option>
+                            <option value="miles" {% if goal and goal[3] == 'miles' %}selected{% endif %}>miles</option>
+                            <option value="calories" {% if goal and goal[3] == 'calories' %}selected{% endif %}>calories</option>
+                            <option value="minutes" {% if goal and goal[3] == 'minutes' %}selected{% endif %}>minutes</option>
+                            <option value="pounds" {% if goal and goal[3] == 'pounds' %}selected{% endif %}>pounds</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sets">Sets</label>
+                        <input type="number" class="form-control" id="sets" name="sets"
+                               value="{{ goal[5] if goal else '' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="freq">Frequency</label>
+                        <input type="number" class="form-control" id="freq" name="freq"
+                               value="{{ goal[7] if goal else '' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="freqType">Frequency Type</label>
+                        <select class="form-control" id="freqType" name="freqType">
+                            <option value="day" {% if goal and goal[8] == 'day' %}selected{% endif %}>day</option>
+                            <option value="week" {% if goal and goal[8] == 'week' %}selected{% endif %}>week</option>
+                            <option value="month" {% if goal and goal[8] == 'month' %}selected{% endif %}>month</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="memo">Memo</label>
+                        <input type="text" class="form-control" id="memo" name="memo"
+                               value="{{ goal[9] if goal else '' }}">
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        {{ 'Update Goal' if goal else 'Submit Goal' }}
+                    </button>
+                </form>
+
+                {% for message in get_flashed_messages() %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="example-box">
+                <div class="section-title">Example Workouts</div>
+                <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Don't know where to start? Try these examples!</p>
+
+
+
+                <div class="example-workout">
+                    <strong>Beginner Cardio</strong><br>
+                    20 min • 3 times per week<br>
+                    Style: Habit
+                </div>
+
+                <div class="example-workout">
+                    <strong>Strength Training</strong><br>
+                    4 sets • 8 reps • 4 days per week<br>
+                    Style: ORM
+                </div>
+
+                <div class="example-workout">
+                    <strong>Running Goal</strong><br>
+                    2 miles • 3 days per week<br>
+                    Style: Exercise
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Handle exercise dropdown and custom input toggle
+        const exerciseSelect = document.getElementById('exerciseSelect');
+        const customExerciseName = document.getElementById('customExerciseName');
+
+        exerciseSelect.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                customExerciseName.style.display = 'block';
+                customExerciseName.focus();
+                customExerciseName.value = '';
+            } else if (this.value !== '') {
+                customExerciseName.style.display = 'none';
+                customExerciseName.value = this.value;
+            } else {
+                customExerciseName.style.display = 'none';
+                customExerciseName.value = '';
+            }
+        });
+
+        // Handle form submission
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            if (exerciseSelect.value === '' && customExerciseName.value === '') {
+                e.preventDefault();
+                alert('Please select an exercise or enter a custom one.');
+            } else if (exerciseSelect.value === 'custom' && customExerciseName.value === '') {
+                e.preventDefault();
+                alert('Please enter a custom exercise name.');
+            }
+        });
+    </script>
+</body>
+</html>
